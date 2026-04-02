@@ -9,38 +9,74 @@ const styles = {
     background: "#0f0e17",
     padding: "24px",
     fontFamily: "'DM Sans', sans-serif",
+    position: "relative",
+    overflow: "hidden",
+  },
+  orb: {
+    position: "absolute",
+    top: "-80px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "420px",
+    height: "420px",
+    background: "radial-gradient(circle, rgba(255,107,53,0.13) 0%, transparent 70%)",
+    pointerEvents: "none",
   },
   card: {
     background: "#1a1828",
-    border: "0.5px solid rgba(255,255,255,0.08)",
-    borderRadius: "20px",
-    padding: "40px 36px",
+    border: "1px solid rgba(255,255,255,0.07)",
+    borderRadius: "24px",
+    padding: "44px 38px",
     width: "100%",
-    maxWidth: "440px",
+    maxWidth: "460px",
+    position: "relative",
+    boxShadow: "0 32px 80px rgba(0,0,0,0.6)",
+  },
+  headerRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "6px",
+  },
+  icon: {
+    width: "36px",
+    height: "36px",
+    background: "linear-gradient(135deg, #ff6b35, #f7c59f)",
+    borderRadius: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "16px",
+    flexShrink: 0,
   },
   title: {
     fontFamily: "'Syne', sans-serif",
-    fontSize: "28px",
+    fontSize: "26px",
     fontWeight: 800,
     color: "#fffffe",
-    margin: "0 0 6px",
+    margin: 0,
     letterSpacing: "-0.5px",
+    flex: 1,
+  },
+  countPill: {
+    background: "rgba(255,107,53,0.15)",
+    border: "1px solid rgba(255,107,53,0.25)",
+    color: "#ff6b35",
+    fontSize: "11px",
+    fontWeight: 500,
+    borderRadius: "20px",
+    padding: "3px 10px",
   },
   subtitle: {
     fontSize: "13px",
     color: "#6e6b8a",
     margin: "0 0 28px",
+    paddingLeft: "48px",
   },
-  badge: {
-    display: "inline-block",
-    background: "rgba(255,107,53,0.15)",
-    color: "#ff6b35",
-    fontSize: "11px",
-    fontWeight: 500,
-    borderRadius: "6px",
-    padding: "2px 8px",
-    marginLeft: "8px",
-    verticalAlign: "middle",
+  divider: {
+    height: "1px",
+    background: "linear-gradient(90deg, rgba(255,107,53,0.3), transparent)",
+    marginBottom: "28px",
   },
   inputRow: {
     display: "flex",
@@ -50,25 +86,26 @@ const styles = {
   input: {
     flex: 1,
     background: "#211f35",
-    border: "0.5px solid rgba(255,255,255,0.1)",
-    borderRadius: "12px",
-    padding: "12px 16px",
+    border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: "14px",
+    padding: "13px 18px",
     fontSize: "14px",
     color: "#fffffe",
     fontFamily: "'DM Sans', sans-serif",
     outline: "none",
   },
   addBtn: {
-    background: "#ff6b35",
+    background: "linear-gradient(135deg, #ff6b35, #e85c27)",
     border: "none",
-    borderRadius: "12px",
-    padding: "12px 20px",
+    borderRadius: "14px",
+    padding: "13px 22px",
     color: "#fff",
     fontSize: "14px",
     fontWeight: 500,
     fontFamily: "'DM Sans', sans-serif",
     cursor: "pointer",
     whiteSpace: "nowrap",
+    boxShadow: "0 4px 20px rgba(255,107,53,0.3)",
   },
   list: {
     listStyle: "none",
@@ -81,22 +118,30 @@ const styles = {
   listItem: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    gap: "12px",
     background: "#211f35",
-    border: "0.5px solid rgba(255,255,255,0.07)",
-    borderRadius: "12px",
-    padding: "14px 16px",
+    border: "1px solid rgba(255,255,255,0.06)",
+    borderRadius: "14px",
+    padding: "15px 18px",
+  },
+  dot: {
+    width: "7px",
+    height: "7px",
+    borderRadius: "50%",
+    background: "#ff6b35",
+    flexShrink: 0,
+    opacity: 0.7,
   },
   taskText: {
     fontSize: "14px",
-    color: "#d4d1f0",
+    color: "#ccc9e8",
     flex: 1,
   },
   deleteBtn: {
-    background: "rgba(229,49,112,0.12)",
-    border: "0.5px solid rgba(229,49,112,0.25)",
-    borderRadius: "8px",
-    padding: "6px 12px",
+    background: "rgba(229,49,112,0.1)",
+    border: "1px solid rgba(229,49,112,0.2)",
+    borderRadius: "9px",
+    padding: "6px 13px",
     color: "#e53170",
     fontSize: "12px",
     fontWeight: 500,
@@ -108,7 +153,7 @@ const styles = {
     textAlign: "center",
     color: "#4e4b6a",
     fontSize: "13px",
-    padding: "24px 0",
+    padding: "32px 0 8px",
   },
 };
 
@@ -146,12 +191,17 @@ function TodoApp() {
         rel="stylesheet"
       />
       <div style={styles.wrapper}>
+        <div style={styles.orb} />
         <div style={styles.card}>
-          <h2 style={styles.title}>
-            My To-Do List
-            <span style={styles.badge}>{tasks.length}</span>
-          </h2>
-          <p style={styles.subtitle}>Stay on top of your day</p>
+          <div style={styles.headerRow}>
+            <div style={styles.icon}>✓</div>
+            <h2 style={styles.title}>My To-Do List</h2>
+            <span style={styles.countPill}>
+              {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
+            </span>
+          </div>
+          <p style={styles.subtitle}>Organize your day, one task at a time</p>
+          <div style={styles.divider} />
 
           <div style={styles.inputRow}>
             <input
@@ -163,21 +213,22 @@ function TodoApp() {
               placeholder="Enter a task..."
             />
             <button style={styles.addBtn} onClick={addTask}>
-              + Add
+              + Add Task
             </button>
           </div>
 
           {tasks.length === 0 ? (
-            <p style={styles.emptyState}>No tasks yet — add one above!</p>
+            <div style={styles.emptyState}>
+              <div style={{ fontSize: "28px", marginBottom: "8px", opacity: 0.4 }}>📋</div>
+              <div>No tasks yet — add one above!</div>
+            </div>
           ) : (
             <ul style={styles.list}>
               {tasks.map((t, index) => (
                 <li key={index} style={styles.listItem}>
+                  <div style={styles.dot} />
                   <span style={styles.taskText}>{t}</span>
-                  <button
-                    style={styles.deleteBtn}
-                    onClick={() => deleteTask(index)}
-                  >
+                  <button style={styles.deleteBtn} onClick={() => deleteTask(index)}>
                     Delete
                   </button>
                 </li>
